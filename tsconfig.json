@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "module": "commonjs",
-    "target": "es6",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2023",
     "strict": true,
     "esModuleInterop": true,
   }

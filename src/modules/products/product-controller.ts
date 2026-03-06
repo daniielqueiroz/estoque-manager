@@ -11,13 +11,13 @@ export const getProduct = async (req: Request, res: Response) => {
   const id = req.params;
 
   //Validar ID com o schema do Zod
-  const result = findProductIdSchema.safeParse(id);
+  const validId = findProductIdSchema.safeParse(id);
 
-  if (!result.success) {
+  if (!validId.success) {
     return res.status(400).json({ message: "ID inválido" });
   }
 
-  const data = await ProductService.getProductById(result.data);
+  const data = await ProductService.getProductById(validId.data);
 
   if (!data) {
     return res.status(404).json({ message: "Produto não encontrado" });

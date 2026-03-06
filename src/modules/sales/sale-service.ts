@@ -50,3 +50,8 @@ export const searchSaleById = async (id: FindSaleIdInput) => {
   const sale = await SaleRepository.findById(id);
   return sale;
 };
+
+export const cancelSaleById = async (id: FindSaleIdInput) => {
+  const canceled = await SaleRepository.cancelById(id);
+  return canceled;
+};

@@ -12,3 +12,4 @@ saleRouter.post(
 );
 saleRouter.get("/", SaleController.getSales);
 saleRouter.get("/:id", SaleController.getSale);
+saleRouter.patch("/:id/cancel", SaleController.cancelSale);

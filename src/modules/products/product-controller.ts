@@ -17,7 +17,7 @@ export const getProduct = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "ID inválido" });
   }
 
-  const data = await ProductService.getProduct(result.data);
+  const data = await ProductService.getProductById(result.data);
 
   if (!data) {
     return res.status(404).json({ message: "Produto não encontrado" });

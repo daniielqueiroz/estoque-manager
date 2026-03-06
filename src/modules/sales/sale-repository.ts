@@ -64,3 +64,29 @@ export const findById = async ({ id }: FindSaleIdInput) => {
   });
   return sale;
 };
+
+export const cancelById = async ({ id }: FindSaleIdInput) => {
+  const sale = await prisma.sale.findFirst({
+    where: { id, status: { not: "CANCELLED" } },
+    include: { items: true },
+  });
+
+  if (!sale) return null;
+
+  // Transaction para garantir que após a venda ser cancelada, os produtos voltem ao estoque
+  return prisma.$transaction(async (tx) => {
+    await tx.sale.update({
+      where: { id },
+      data: { status: "CANCELLED" },
+    });
+
+    for (const item of sale.items) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { quantity: { increment: item.quantity } },
+      });
+    }
+
+    return true;
+  });
+};

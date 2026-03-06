@@ -44,3 +44,23 @@ export const getSale = async (req: Request, res: Response) => {
 
   res.status(200).json(sale);
 };
+
+export const cancelSale = async (req: Request, res: Response) => {
+  const id = req.params;
+
+  const validId = findSaleIdSchema.safeParse(id);
+
+  if (!validId.success) {
+    return res.status(400).json({ message: "ID Inválido" });
+  }
+
+  const canceled = await SaleService.cancelSaleById(validId.data);
+
+  if (!canceled) {
+    return res
+      .status(404)
+      .json({ message: "Venda não encontrada ou já cancelada" });
+  }
+
+  return res.status(204).send();
+};

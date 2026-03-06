@@ -5,16 +5,16 @@ import { createProductSchema, updateProductSchema } from "./product-schema";
 
 export const productRouter = Router();
 
-productRouter.get("/", ProductController.getProducts);
-productRouter.get("/:id", ProductController.getProduct);
-productRouter.delete("/:id", ProductController.deleteProduct);
 productRouter.post(
   "/",
   validadeRequest(createProductSchema),
   ProductController.postProduct,
 );
+productRouter.get("/", ProductController.getProducts);
+productRouter.get("/:id", ProductController.getProduct);
 productRouter.put(
   "/:id",
   validadeRequest(updateProductSchema),
   ProductController.updateProduct,
 );
+productRouter.delete("/:id", ProductController.deleteProduct);

@@ -6,7 +6,7 @@ export const findAll = async () => {
   return products;
 };
 
-export const findOne = async ({ id }: FindProductIdInput) => {
+export const findById = async ({ id }: FindProductIdInput) => {
   const product = await prisma.product.findUnique({
     where: { id },
   });

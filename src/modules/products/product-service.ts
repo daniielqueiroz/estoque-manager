@@ -6,8 +6,8 @@ export const listProducts = async () => {
   return data;
 };
 
-export const getProduct = async (productId: FindProductIdInput) => {
-  const product = await ProductRepository.findOne(productId);
+export const getProductById = async (productId: FindProductIdInput) => {
+  const product = await ProductRepository.findById(productId);
   return product;
 };
 

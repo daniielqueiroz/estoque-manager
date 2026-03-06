@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as ProductController from "./product-controller";
 import { validadeRequest } from "../../shared/middlewares/validateRequest";
-import { createProductSchema } from "./product-schema";
+import { createProductSchema, updateProductSchema } from "./product-schema";
 
 export const productRouter = Router();
 
@@ -12,4 +12,9 @@ productRouter.post(
   "/",
   validadeRequest(createProductSchema),
   ProductController.postProduct,
+);
+productRouter.put(
+  "/:id",
+  validadeRequest(updateProductSchema),
+  ProductController.updateProduct,
 );

@@ -1,5 +1,9 @@
 import * as ProductRepository from "./product-repository";
-import { CreateProductInput, FindProductIdInput } from "./product-schema";
+import {
+  CreateProductInput,
+  FindProductIdInput,
+  UpdateProductInput,
+} from "./product-schema";
 
 export const listProducts = async () => {
   const data = await ProductRepository.findAll();
@@ -19,4 +23,12 @@ export const deleteProductById = async (productId: FindProductIdInput) => {
 export const createProduct = async (data: CreateProductInput) => {
   const product = await ProductRepository.create(data);
   return product;
+};
+
+export const updateProduct = async (
+  id: FindProductIdInput,
+  data: UpdateProductInput,
+) => {
+  const updatedProduct = await ProductRepository.update(id, data);
+  return updatedProduct;
 };

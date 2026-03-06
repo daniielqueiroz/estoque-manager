@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import * as ProductService from "./product-service";
-import { CreateProductInput, findProductIdSchema } from "./product-schema";
+import {
+  CreateProductInput,
+  findProductIdSchema,
+  UpdateProductInput,
+} from "./product-schema";
 
 export const getProducts = async (req: Request, res: Response) => {
   const data = await ProductService.listProducts();
@@ -48,4 +52,23 @@ export const postProduct = async (req: Request, res: Response) => {
   const body = req.body as CreateProductInput;
   const data = await ProductService.createProduct(body);
   res.status(201).json(data);
+};
+
+export const updateProduct = async (req: Request, res: Response) => {
+  const id = req.params;
+  const body = req.body as UpdateProductInput;
+
+  const validId = findProductIdSchema.safeParse(id);
+
+  if (!validId.success) {
+    return res.status(400).json({ message: "ID inválido" });
+  }
+
+  const updatedProduct = await ProductService.updateProduct(validId.data, body);
+
+  if (!updatedProduct) {
+    return res.status(404).json({ message: "Produto não encontrado" });
+  }
+
+  return res.status(200).json(updatedProduct);
 };

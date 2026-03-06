@@ -16,6 +16,7 @@ export const createProductSchema = z.object({
 });
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 
+// .partial() torna todos os campos opcionais; .strict() rejeita campos desconhecidos
 export const updateProductSchema = createProductSchema.partial().strict();
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
 

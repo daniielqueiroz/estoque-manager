@@ -18,6 +18,13 @@ export const findAll = async () => {
   return products;
 };
 
+export const findManyByIds = async (ids: string[]) => {
+  const products = await prisma.product.findMany({
+    where: { id: { in: ids }, deletedAt: null },
+  });
+  return products;
+};
+
 export const findById = async ({ id }: FindProductIdInput) => {
   const product = await prisma.product.findFirst({
     where: { id, deletedAt: null },

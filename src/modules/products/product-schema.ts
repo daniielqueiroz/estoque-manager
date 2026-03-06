@@ -14,11 +14,12 @@ export const createProductSchema = z.object({
     .min(0, "Quantidade não pode ser negativa"),
   category: z.string().trim().max(50),
 });
-
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 
 export const findProductIdSchema = z.object({
   id: z.uuid("ID Inválido"),
 });
-
 export type FindProductIdInput = z.infer<typeof findProductIdSchema>;
+
+export const updateProductSchema = createProductSchema.partial().strict();
+export type UpdateProductInput = z.infer<typeof updateProductSchema>;

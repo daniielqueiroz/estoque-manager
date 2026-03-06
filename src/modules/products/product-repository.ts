@@ -1,5 +1,10 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
-import { CreateProductInput, FindProductIdInput } from "./product-schema";
+import {
+  CreateProductInput,
+  FindProductIdInput,
+  UpdateProductInput,
+} from "./product-schema";
 
 export const findAll = async () => {
   const products = await prisma.product.findMany({
@@ -40,4 +45,26 @@ export const deleteById = async ({ id }: FindProductIdInput) => {
 export const create = async (data: CreateProductInput) => {
   const user = await prisma.product.create({ data });
   return user;
+};
+
+export const update = async (
+  { id }: FindProductIdInput,
+  data: UpdateProductInput,
+) => {
+  try {
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: data,
+    });
+    return updatedProduct;
+  } catch (error) {
+    // Validação caso o ID informado seja inexistente
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return null;
+    }
+    throw error;
+  }
 };

@@ -4,7 +4,7 @@ import { FindSaleIdInput, GenerateSaleReportInput } from "./sale-schema";
 
 /**
  * Cria uma venda contedo uma lista de Products atraves do Nested Writes do Prisma
- * Faz uso de uma transcation para garantir que o decremento do estoque seja feito em segurança
+ * Faz uso de uma transaction para garantir que o decremento do estoque seja feito em segurança
  * @param customerName Nome do cliente
  * @param totalAmount Valor total da venda, calculado na camada service para evitar manipulação do frontend
  * @param items Lista de Products

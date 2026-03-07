@@ -20,87 +20,44 @@ export const getProducts = async (req: Request, res: Response) => {
 
 export const getProduct = async (req: Request, res: Response) => {
   const id = req.params;
+  const validId = findProductIdSchema.parse(id);
 
-  //Validar ID com o schema do Zod
-  const validId = findProductIdSchema.safeParse(id);
-
-  if (!validId.success) {
-    return res.status(400).json({ message: "ID inválido" });
-  }
-
-  const data = await ProductService.getProductById(validId.data);
-
-  if (!data) {
-    return res.status(404).json({ message: "Produto não encontrado" });
-  }
+  const data = await ProductService.getProductById(validId);
 
   return res.status(200).json(data);
 };
 
 export const getProductSaleReport = async (req: Request, res: Response) => {
   const id = req.params;
-  const validId = findProductIdSchema.safeParse(id);
-  if (!validId.success) {
-    return res.status(400).json({ message: "ID inválido" });
-  }
+  const validId = findProductIdSchema.parse(id);
 
   const range = req.query;
-  const validRange = generateProductReportSchema.safeParse(range);
+  const validRange = generateProductReportSchema.parse(range);
 
-  if (!validRange.success) {
-    return res.status(400).json({ message: "O range informado é inválido" });
-  }
+  const productSaleReport = await ProductService.generateProductSaleReport(
+    validId,
+    validRange,
+  );
 
-  try {
-    const productSaleReport = await ProductService.generateProductSaleReport(
-      validId.data,
-      validRange.data,
-    );
-
-    return res.status(200).json(productSaleReport);
-  } catch (error) {
-    if (error instanceof Error) {
-      return res.status(400).json({ message: "Produto não encontrado" });
-    }
-    return res
-      .status(500)
-      .json({ message: "Erro ao gerar relatório do produto" });
-  }
+  return res.status(200).json(productSaleReport);
 };
 
 export const updateProduct = async (req: Request, res: Response) => {
   const id = req.params;
+  const validId = findProductIdSchema.parse(id);
+
   const body = req.body as UpdateProductInput;
 
-  const validId = findProductIdSchema.safeParse(id);
-
-  if (!validId.success) {
-    return res.status(400).json({ message: "ID inválido" });
-  }
-
-  const updatedProduct = await ProductService.updateProduct(validId.data, body);
-
-  if (!updatedProduct) {
-    return res.status(404).json({ message: "Produto não encontrado" });
-  }
+  const updatedProduct = await ProductService.updateProduct(validId, body);
 
   return res.status(200).json(updatedProduct);
 };
 
 export const deleteProduct = async (req: Request, res: Response) => {
   const id = req.params;
+  const validId = findProductIdSchema.parse(id);
 
-  const validId = findProductIdSchema.safeParse(id);
-
-  if (!validId.success) {
-    return res.status(400).json({ message: "ID inválido" });
-  }
-
-  const deleted = await ProductService.deleteProductById(validId.data);
-
-  if (!deleted) {
-    return res.status(404).json({ message: "Produto não encontrado" });
-  }
+  await ProductService.deleteProductById(validId);
 
   return res.status(204).send();
 };

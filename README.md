@@ -15,7 +15,7 @@ Projeto desenvolvido como portfólio pessoal.
 | **Express**    | ^5.2   | Framework HTTP                            |
 | **Prisma ORM** | ^6.19  | Acesso ao banco de dados                  |
 | **Zod**        | ^4.3   | Validação de dados de entrada             |
-| **MySQL**      | -      | Banco de dados relacional                 |
+| **MySQL**      | ^8.0   | Banco de dados relacional                 |
 | **tsx**        | ^4.21  | Execução de TypeScript em desenvolvimento |
 | **tsup**       | ^8.5   | Compilação para produção                  |
 | **dotenv**     | ^17    | Gerenciamento de variáveis de ambiente    |

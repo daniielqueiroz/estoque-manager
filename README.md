@@ -66,7 +66,7 @@ Requisição HTTP
   [ Routes ]       Define método HTTP, caminho e middlewares aplicados
       |
       v
-  [ Controller ]   Extrai e valida parâmetr os de rota/query; mapeia
+  [ Controller ]   Extrai e valida parâmetros de rota/query; mapeia
       |            resultados do serviço para respostas HTTP (status + JSON)
       v
   [ Service ]      Contém toda a lógica de negócio: validações de estoque,
@@ -101,13 +101,14 @@ Todos os endpoints são prefixados com `/api`.
 
 ### Produtos — `/api/products`
 
-| Método   | Rota                | Descrição                                           |
-| -------- | ------------------- | --------------------------------------------------- |
-| `POST`   | `/api/products`     | Cadastra um novo produto                            |
-| `GET`    | `/api/products`     | Lista todos os produtos ativos                      |
-| `GET`    | `/api/products/:id` | Busca um produto pelo ID (UUID)                     |
-| `PUT`    | `/api/products/:id` | Atualiza um produto (todos os campos são opcionais) |
-| `DELETE` | `/api/products/:id` | Remove um produto via soft delete                   |
+| Método   | Rota                       | Descrição                                           |
+| -------- | -------------------------- | --------------------------------------------------- |
+| `POST`   | `/api/products`            | Cadastra um novo produto                            |
+| `GET`    | `/api/products`            | Lista todos os produtos ativos                      |
+| `GET`    | `/api/products/:id`        | Busca um produto pelo ID (UUID)                     |
+| `GET`    | `/api/products/:id/report` | Gera relatório de vendas de um produto por período  |
+| `PUT`    | `/api/products/:id`        | Atualiza um produto (todos os campos são opcionais) |
+| `DELETE` | `/api/products/:id`        | Remove um produto via soft delete                   |
 
 #### POST /api/products — Corpo da requisição
 
@@ -139,6 +140,56 @@ Todos os campos são opcionais. Campos não enviados não são alterados. Campos
   "quantity": 45
 }
 ```
+
+#### GET /api/products/:id/report — Query Params
+
+```
+GET /api/products/:id/report?startDate=2025-01-01&endDate=2025-01-31
+```
+
+| Parâmetro   | Formato      | Descrição                                        |
+| ----------- | ------------ | ------------------------------------------------ |
+| `startDate` | `YYYY-MM-DD` | Data de início do período (inclusiva)            |
+| `endDate`   | `YYYY-MM-DD` | Data de fim do período (inclusiva, até 23:59:59) |
+
+**Resposta:**
+
+```json
+{
+  "product": {
+    "id": "uuid-do-produto",
+    "name": "Teclado Mecânico",
+    "price": 299.9,
+    "quantity": 40,
+    "category": "Periféricos"
+  },
+  "report": {
+    "salesOccurrences": 8,
+    "totalProductsSold": 15,
+    "totalRevenue": 4498.5,
+    "dailySales": [
+      {
+        "date": "2025-01-10",
+        "salesOccurrences": 3,
+        "totalQuantity": 5,
+        "avgPrice": 299.9,
+        "revenue": 1499.5
+      }
+    ]
+  }
+}
+```
+
+| Campo                                  | Descrição                                              |
+| -------------------------------------- | ------------------------------------------------------ |
+| `report.salesOccurrences`              | Total de transações de venda em que o produto apareceu |
+| `report.totalProductsSold`             | Total de unidades vendidas no período                  |
+| `report.totalRevenue`                  | Receita total gerada pelo produto no período           |
+| `report.dailySales`                    | Detalhamento por dia                                   |
+| `report.dailySales[].salesOccurrences` | Número de vendas no dia                                |
+| `report.dailySales[].totalQuantity`    | Unidades vendidas no dia                               |
+| `report.dailySales[].avgPrice`         | Preço médio praticado no dia                           |
+| `report.dailySales[].revenue`          | Receita do dia                                         |
 
 ---
 

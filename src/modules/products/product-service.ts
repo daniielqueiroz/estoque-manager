@@ -1,3 +1,4 @@
+import { AppError } from "../../shared/errors/AppError";
 import * as ProductRepository from "./product-repository";
 import {
   CreateProductInput,
@@ -18,6 +19,11 @@ export const listProducts = async () => {
 
 export const getProductById = async (productId: FindProductIdInput) => {
   const product = await ProductRepository.findById(productId);
+
+  if (!product) {
+    throw new AppError("Produto não encontrado", 404);
+  }
+
   return product;
 };
 
@@ -28,7 +34,7 @@ export const generateProductSaleReport = async (
   const product = await ProductRepository.findById(id);
 
   if (!product) {
-    throw new Error("Produto não encontrado");
+    throw new AppError("Produto não encontrado", 404);
   }
 
   const report = await ProductRepository.reportProduct(id, range);
@@ -64,10 +70,20 @@ export const updateProduct = async (
   data: UpdateProductInput,
 ) => {
   const updatedProduct = await ProductRepository.update(id, data);
+
+  if (!updatedProduct) {
+    throw new AppError("Produto não encontrado", 404);
+  }
+
   return updatedProduct;
 };
 
 export const deleteProductById = async (productId: FindProductIdInput) => {
   const deleted = await ProductRepository.deleteById(productId);
+
+  if (!deleted) {
+    throw new AppError("Produto não encontrado", 404);
+  }
+
   return deleted;
 };

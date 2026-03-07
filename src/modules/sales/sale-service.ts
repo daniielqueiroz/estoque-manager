@@ -5,6 +5,7 @@ import {
 } from "./sale-schema";
 import * as ProductRepository from "../products/product-repository";
 import * as SaleRepository from "./sale-repository";
+import { AppError } from "../../shared/errors/AppError";
 
 export const createSale = async (data: CreateSaleInput) => {
   // Recupera apenas os IDs dos Products
@@ -15,7 +16,7 @@ export const createSale = async (data: CreateSaleInput) => {
 
   // Valida se conseguiu encontrar todos
   if (products.length !== productsIds.length) {
-    throw new Error("Um ou mais produtos não encontrados");
+    throw new AppError("Um ou mais produtos não encontrados", 404);
   }
 
   // Itera sobre a lista de produtos enviada pelo frontend
@@ -25,7 +26,10 @@ export const createSale = async (data: CreateSaleInput) => {
     const product = products.find((p) => p.id === item.productId)!;
 
     if (product.quantity < item.quantity) {
-      throw new Error(`Estoque insuficiente para o produto ${product.name}`);
+      throw new AppError(
+        `Estoque insuficiente para o produto ${product.name}`,
+        400,
+      );
     }
 
     return {
@@ -52,6 +56,11 @@ export const listSales = async () => {
 
 export const searchSaleById = async (id: FindSaleIdInput) => {
   const sale = await SaleRepository.findById(id);
+
+  if (!sale) {
+    throw new AppError("Nenhuma venda encontrada", 404);
+  }
+
   return sale;
 };
 
@@ -76,5 +85,10 @@ export const generateSaleReport = async (range: GenerateSaleReportInput) => {
 
 export const cancelSaleById = async (id: FindSaleIdInput) => {
   const canceled = await SaleRepository.cancelById(id);
+
+  if (!canceled) {
+    throw new AppError("Venda não encontrada ou já cancelada", 404);
+  }
+
   return canceled;
 };

@@ -43,13 +43,31 @@ export const create = async (
   });
 };
 
-export const findAll = async () => {
-  const sales = await prisma.sale.findMany({
-    include: {
-      items: true,
-    },
-  });
-  return sales;
+export const findAll = async (page: number, limit: number) => {
+  const skip = (page - 1) * limit;
+
+  const [sales, total] = await Promise.all([
+    prisma.sale.findMany({
+      skip,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        items: true,
+      },
+    }),
+
+    prisma.sale.count(),
+  ]);
+
+  return {
+    data: sales,
+    page,
+    limit,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 };
 
 export const findById = async ({ id }: FindSaleIdInput) => {

@@ -15,7 +15,10 @@ export const postSale = async (req: Request, res: Response) => {
 };
 
 export const getSales = async (req: Request, res: Response) => {
-  const sales = await SaleService.listSales();
+  const page = Math.max(Number(req.query.page) || 1, 1);
+  const limit = Math.min(Number(req.query.limit) || 10, 50);
+
+  const sales = await SaleService.listSales(page, limit);
   return res.status(200).json(sales);
 };
 

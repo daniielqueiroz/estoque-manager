@@ -65,16 +65,18 @@ export const reportProduct = async (
     revenue: Total arrecadado na venda desse produto no dia */
     prisma.$queryRaw<DailySaleRow[]>`
       SELECT
-        DATE(createdAt)            AS date,
-        COUNT(*)                   AS dailySales,
-        SUM(quantity)              AS productsSold,
-        AVG(unitPrice)             AS avgPrice,
-        SUM(unitPrice * quantity)  AS revenue
-      FROM SaleItem
-      WHERE productId = ${id}
-        AND createdAt >= ${range.startDate}
-        AND createdAt <= ${range.endDate}
-      GROUP BY DATE(createdAt)
+        DATE(si.createdAt)            AS date,
+        COUNT(*)                      AS dailySales,
+        SUM(si.quantity)              AS productsSold,
+        AVG(si.unitPrice)             AS avgPrice,
+        SUM(si.unitPrice * si.quantity) AS revenue
+      FROM SaleItem si
+      INNER JOIN Sale s ON s.id = si.saleId
+      WHERE si.productId = ${id}
+        AND si.createdAt >= ${range.startDate}
+        AND si.createdAt <= ${range.endDate}
+        AND s.status != 'CANCELLED'
+      GROUP BY DATE(si.createdAt)
       ORDER BY date ASC
     `,
   ]);

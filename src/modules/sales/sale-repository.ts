@@ -119,17 +119,20 @@ export const reportData = async (range: GenerateSaleReportInput) => {
     avgPrice: Preço médio, pois pode ocorrer do preço mudar ao longo do dia, então não é seguro pegar de unitPrice
     revenue: Total arrecadado na venda desse produto no dia */
       prisma.$queryRaw<DailySaleRow[]>`
-      SELECT
-        DATE(createdAt)            AS date,
-        COUNT(*)                   AS dailySales,
-        SUM(quantity)              AS productsSold,
-        AVG(unitPrice)             as avgPrice,
-        SUM(unitPrice * quantity)  AS revenue
-      FROM SaleItem
-        WHERE createdAt >= ${range.startDate}
-        AND createdAt <= ${range.endDate}
-      GROUP BY DATE(createdAt)
-    `,
+        SELECT
+          DATE(si.createdAt)            AS date,
+          COUNT(*)                      AS dailySales,
+          SUM(si.quantity)              AS productsSold,
+          AVG(si.unitPrice)             AS avgPrice,
+          SUM(si.unitPrice * si.quantity) AS revenue
+        FROM SaleItem si
+        INNER JOIN Sale s ON s.id = si.saleId
+        WHERE si.createdAt >= ${range.startDate}
+          AND si.createdAt <= ${range.endDate}
+          AND s.status != 'CANCELLED'
+        GROUP BY DATE(si.createdAt)
+        ORDER BY date ASC
+      `,
     ]);
 
   return { totalSales, totalProductsSold, totalRevenue, dailyData };

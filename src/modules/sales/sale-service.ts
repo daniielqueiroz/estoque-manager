@@ -64,9 +64,12 @@ export const searchSaleById = async (id: FindSaleIdInput) => {
   return sale;
 };
 
-export const generateSaleReport = async (range: GenerateSaleReportInput) => {
+export const generateSaleReport = async (
+  range: GenerateSaleReportInput,
+  userTimezone: string,
+) => {
   const { totalSales, totalProductsSold, totalRevenue, dailyData } =
-    await SaleRepository.reportData(range);
+    await SaleRepository.reportData(range, userTimezone);
 
   // Necessário fazer Cast para Number, pois o MySQL devolve BigInt na raw SQL ao usar COUNT e SUM
   // e o Express não consegue serializar o bigint

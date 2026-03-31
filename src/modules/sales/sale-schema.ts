@@ -25,11 +25,6 @@ export const generateSaleReportSchema = z
   .object({
     startDate: z.iso.datetime().transform((val) => new Date(val)),
     endDate: z.iso.datetime().transform((val) => new Date(val)),
-    userTz: z
-      .string()
-      .refine((val) => Intl.supportedValuesOf("timeZone").includes(val), {
-        message: "Timezone inválida",
-      }),
   })
   .refine((data) => data.endDate >= data.startDate, {
     message: "endDate deve ser maior ou igual a startDate",

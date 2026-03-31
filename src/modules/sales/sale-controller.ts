@@ -35,7 +35,10 @@ export const getSaleReport = async (req: Request, res: Response) => {
   const range = req.query;
   const validRange = generateSaleReportSchema.parse(range);
 
-  const saleReport = await SaleService.generateSaleReport(validRange);
+  const saleReport = await SaleService.generateSaleReport(
+    { startDate: validRange.startDate, endDate: validRange.endDate },
+    req.userTimezone,
+  );
 
   return res.status(200).json(saleReport);
 };

@@ -37,6 +37,7 @@ export const getProductSaleReport = async (req: Request, res: Response) => {
   const productSaleReport = await ProductService.generateProductSaleReport(
     validId,
     validRange,
+    req.userTimezone,
   );
 
   return res.status(200).json(productSaleReport);

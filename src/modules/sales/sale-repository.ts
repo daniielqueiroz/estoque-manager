@@ -85,7 +85,10 @@ export const findById = async ({ id }: FindSaleIdInput) => {
   return sale;
 };
 
-export const reportData = async (range: GenerateSaleReportInput) => {
+export const reportData = async (
+  range: GenerateSaleReportInput,
+  userTimezone: string,
+) => {
   const condition = {
     status: { not: SaleStatus.CANCELLED },
     createdAt: {
@@ -94,7 +97,7 @@ export const reportData = async (range: GenerateSaleReportInput) => {
     },
   };
 
-  const timeZone = Prisma.raw(`'${range.userTz}'`);
+  const timeZone = Prisma.raw(`'${userTimezone}'`);
 
   const [totalSales, totalProductsSold, totalRevenue, rawDailyData] =
     await Promise.all([

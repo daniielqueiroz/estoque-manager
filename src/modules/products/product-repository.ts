@@ -38,13 +38,14 @@ export const findById = async ({ id }: FindProductIdInput) => {
 export const reportProduct = async (
   { id }: FindProductIdInput,
   range: GenerateProductReportInput,
+  userTimezone: string,
 ) => {
   const condition = {
     productId: id,
     createdAt: { gte: range.startDate, lt: range.endDate },
   };
 
-  const timeZone = Prisma.raw(`'${range.userTz}'`);
+  const timeZone = Prisma.raw(`'${userTimezone}'`);
 
   const [totalSales, totalProductsSold, rawDailyData] = await Promise.all([
     // Total de vendas que esse produto

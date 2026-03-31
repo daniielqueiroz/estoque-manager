@@ -30,6 +30,7 @@ export const getProductById = async (productId: FindProductIdInput) => {
 export const generateProductSaleReport = async (
   id: FindProductIdInput,
   range: GenerateProductReportInput,
+  userTimezone: string,
 ) => {
   const product = await ProductRepository.findById(id);
 
@@ -37,7 +38,7 @@ export const generateProductSaleReport = async (
     throw new AppError("Produto não encontrado", 404);
   }
   const { totalSales, totalProductsSold, dailyData } =
-    await ProductRepository.reportProduct(id, range);
+    await ProductRepository.reportProduct(id, range, userTimezone);
 
   const totalRevenue = dailyData.reduce(
     (acc, day) => acc + Number(day.revenue),

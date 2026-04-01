@@ -44,13 +44,13 @@ export const create = async (
   });
 };
 
-export const findAll = async (page: number, limit: number) => {
-  const skip = (page - 1) * limit;
+export const findAll = async (page: number, pageSize: number) => {
+  const skip = (page - 1) * pageSize;
 
-  const [sales, total] = await Promise.all([
+  const [data, total] = await Promise.all([
     prisma.sale.findMany({
       skip,
-      take: limit,
+      take: pageSize,
       orderBy: {
         createdAt: "desc",
       },
@@ -63,11 +63,8 @@ export const findAll = async (page: number, limit: number) => {
   ]);
 
   return {
-    data: sales,
-    page,
-    limit,
+    data,
     total,
-    totalPages: Math.ceil(total / limit),
   };
 };
 

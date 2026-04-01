@@ -6,6 +6,7 @@ import {
 import * as ProductRepository from "../products/product-repository";
 import * as SaleRepository from "./sale-repository";
 import { AppError } from "../../shared/errors/AppError";
+import { paginate } from "../../shared/utils/paginate";
 
 export const createSale = async (data: CreateSaleInput) => {
   // Recupera apenas os IDs dos Products
@@ -49,9 +50,10 @@ export const createSale = async (data: CreateSaleInput) => {
   return SaleRepository.create(data.customerName, totalAmount, items);
 };
 
-export const listSales = async (page: number, limit: number) => {
-  const sales = await SaleRepository.findAll(page, limit);
-  return sales;
+export const listSales = async (page: number, pageSize: number) => {
+  const { data, total } = await SaleRepository.findAll(page, pageSize);
+
+  return paginate({ data, total, page, pageSize });
 };
 
 export const searchSaleById = async (id: FindSaleIdInput) => {

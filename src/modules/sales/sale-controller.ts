@@ -5,6 +5,7 @@ import {
   generateSaleReportSchema,
 } from "./sale-schema";
 import * as SaleService from "./sale-service";
+import { paginationSchema } from "../../shared/schemas/pagination";
 
 export const postSale = async (req: Request, res: Response) => {
   const body = req.body as CreateSaleInput;
@@ -15,10 +16,9 @@ export const postSale = async (req: Request, res: Response) => {
 };
 
 export const getSales = async (req: Request, res: Response) => {
-  const page = Math.max(Number(req.query.page) || 1, 1);
-  const limit = Math.min(Number(req.query.limit) || 10, 50);
+  const { page, pageSize } = paginationSchema.parse(req.query);
 
-  const sales = await SaleService.listSales(page, limit);
+  const sales = await SaleService.listSales(page, pageSize);
   return res.status(200).json(sales);
 };
 

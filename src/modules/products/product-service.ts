@@ -1,4 +1,5 @@
 import { AppError } from "../../shared/errors/AppError";
+import { paginate } from "../../shared/utils/paginate";
 import * as ProductRepository from "./product-repository";
 import {
   CreateProductInput,
@@ -12,9 +13,10 @@ export const createProduct = async (data: CreateProductInput) => {
   return product;
 };
 
-export const listProducts = async () => {
-  const data = await ProductRepository.findAll();
-  return data;
+export const listProducts = async (page: number, pageSize: number) => {
+  const { data, total } = await ProductRepository.findAll(page, pageSize);
+
+  return paginate({ data, total, page, pageSize });
 };
 
 export const getProductById = async (productId: FindProductIdInput) => {

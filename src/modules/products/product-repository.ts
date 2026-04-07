@@ -13,12 +13,21 @@ export const create = async (data: CreateProductInput) => {
   return user;
 };
 
-export const findAll = async () => {
-  const products = await prisma.product.findMany({
-    where: { deletedAt: null },
-    orderBy: { updatedAt: "desc" },
-  });
-  return products;
+export const findAll = async (page: number, pageSize: number) => {
+  const skip = (page - 1) * pageSize;
+
+  const [data, total] = await Promise.all([
+    prisma.product.findMany({
+      skip,
+      take: pageSize,
+      where: { deletedAt: null },
+      orderBy: { updatedAt: "desc" },
+    }),
+
+    prisma.product.count(),
+  ]);
+
+  return { data, total };
 };
 
 export const findManyByIds = async (ids: string[]) => {

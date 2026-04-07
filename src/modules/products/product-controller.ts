@@ -6,6 +6,7 @@ import {
   generateProductReportSchema,
   UpdateProductInput,
 } from "./product-schema";
+import { paginationSchema } from "../../shared/schemas/pagination";
 
 export const postProduct = async (req: Request, res: Response) => {
   const body = req.body as CreateProductInput;
@@ -14,7 +15,9 @@ export const postProduct = async (req: Request, res: Response) => {
 };
 
 export const getProducts = async (req: Request, res: Response) => {
-  const data = await ProductService.listProducts();
+  const { page, pageSize } = paginationSchema.parse(req.query);
+
+  const data = await ProductService.listProducts(page, pageSize);
   res.status(200).json(data);
 };
 

@@ -44,7 +44,7 @@ export type GenerateProductReportInput = z.infer<
 
 export const listProductsSortSchema = z.object({
   sortBy: z
-    .enum(["name", "price", "category", "createdAt", "updatedAt"])
+    .enum(["name", "price", "category", "quantity", "createdAt", "updatedAt"])
     .default("updatedAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });

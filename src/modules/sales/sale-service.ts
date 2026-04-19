@@ -53,6 +53,10 @@ export const listSales = async (page: number, pageSize: number) => {
   return paginate({ data, total, page, pageSize });
 };
 
+export const exportSales = async (range: DateRangeInput) => {
+  return SaleRepository.exportAll(range);
+};
+
 export const searchSaleById = async (id: FindSaleIdInput) => {
   const sale = await SaleRepository.findById(id);
 

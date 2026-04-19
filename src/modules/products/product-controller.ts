@@ -25,6 +25,11 @@ export const getProducts = async (req: Request, res: Response) => {
   res.status(200).json(data);
 };
 
+export const exportProducts = async (req: Request, res: Response) => {
+  const data = await ProductService.exportProducts();
+  return res.status(200).json(data);
+};
+
 export const getProduct = async (req: Request, res: Response) => {
   const id = req.params;
   const validId = findProductIdSchema.parse(id);

@@ -30,6 +30,10 @@ export const listProducts = async (
   return paginate({ data, total, page, pageSize });
 };
 
+export const exportProducts = async () => {
+  return ProductRepository.exportAll();
+};
+
 export const getProductById = async (productId: FindProductIdInput) => {
   const product = await ProductRepository.findById(productId);
 

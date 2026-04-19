@@ -11,6 +11,7 @@ saleRouter.post(
   SaleController.postSale,
 );
 saleRouter.get("/", SaleController.getSales);
+saleRouter.get("/export", SaleController.exportSales);
 saleRouter.get("/report", SaleController.getSaleReport);
 saleRouter.get("/:id", SaleController.getSale);
 saleRouter.patch("/:id/cancel", SaleController.cancelSale);

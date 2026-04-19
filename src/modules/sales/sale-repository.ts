@@ -69,6 +69,21 @@ export const findAll = async (page: number, pageSize: number) => {
   };
 };
 
+export const exportAll = async (range: DateRangeInput) => {
+  const sales = await prisma.sale.findMany({
+    where: {
+      createdAt: { gte: range.startDate, lte: range.endDate },
+    },
+    orderBy: { createdAt: "asc" },
+    include: { _count: { select: { items: true } } },
+  });
+
+  return sales.map(({ _count, ...sale }) => ({
+    ...sale,
+    itemCount: _count.items,
+  }));
+};
+
 export const findById = async ({ id }: FindSaleIdInput) => {
   const sale = await prisma.sale.findFirst({
     where: { id },

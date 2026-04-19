@@ -19,6 +19,14 @@ export const getSales = async (req: Request, res: Response) => {
   return res.status(200).json(sales);
 };
 
+export const exportSales = async (req: Request, res: Response) => {
+  const range = req.query;
+  const validRange = dateRangeSchema.parse(range);
+
+  const data = await SaleService.exportSales(validRange);
+  return res.status(200).json(data);
+};
+
 export const getSale = async (req: Request, res: Response) => {
   const id = req.params;
   const validId = findSaleIdSchema.parse(id);

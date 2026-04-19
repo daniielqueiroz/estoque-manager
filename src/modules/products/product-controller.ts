@@ -3,12 +3,12 @@ import * as ProductService from "./product-service";
 import {
   CreateProductInput,
   findProductIdSchema,
-  generateProductReportSchema,
   listProductsSortSchema,
   listProductsSearchSchema,
   UpdateProductInput,
 } from "./product-schema";
 import { paginationSchema } from "../../shared/schemas/pagination";
+import { dateRangeSchema } from "../../shared/schemas/dateRange";
 
 export const postProduct = async (req: Request, res: Response) => {
   const body = req.body as CreateProductInput;
@@ -39,7 +39,7 @@ export const getProductSaleReport = async (req: Request, res: Response) => {
   const validId = findProductIdSchema.parse(id);
 
   const range = req.query;
-  const validRange = generateProductReportSchema.parse(range);
+  const validRange = dateRangeSchema.parse(range);
 
   const productSaleReport = await ProductService.generateProductSaleReport(
     validId,

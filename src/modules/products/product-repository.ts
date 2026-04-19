@@ -4,10 +4,10 @@ import {
   CreateProductInput,
   DailySaleRow,
   FindProductIdInput,
-  GenerateProductReportInput,
   ListProductsSort,
   UpdateProductInput,
 } from "./product-schema";
+import { DateRangeInput } from "../../shared/schemas/dateRange";
 
 export const create = async (data: CreateProductInput) => {
   const user = await prisma.product.create({ data });
@@ -25,10 +25,7 @@ export const findAll = async (
   const where: Prisma.ProductWhereInput = {
     deletedAt: null,
     ...(search && {
-      OR: [
-        { name: { contains: search } },
-        { category: { contains: search } },
-      ],
+      OR: [{ name: { contains: search } }, { category: { contains: search } }],
     }),
   };
 
@@ -61,7 +58,7 @@ export const findById = async ({ id }: FindProductIdInput) => {
 
 export const reportProduct = async (
   { id }: FindProductIdInput,
-  range: GenerateProductReportInput,
+  range: DateRangeInput,
   userTimezone: string,
 ) => {
   const condition = {

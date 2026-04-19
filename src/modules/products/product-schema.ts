@@ -29,19 +29,6 @@ export const findProductIdSchema = z.object({
 });
 export type FindProductIdInput = z.infer<typeof findProductIdSchema>;
 
-export const generateProductReportSchema = z
-  .object({
-    startDate: z.iso.datetime().transform((val) => new Date(val)),
-    endDate: z.iso.datetime().transform((val) => new Date(val)),
-  })
-  .refine((data) => data.endDate >= data.startDate, {
-    message: "endDate deve ser maior ou igual a startDate",
-    path: ["endDate"],
-  });
-export type GenerateProductReportInput = z.infer<
-  typeof generateProductReportSchema
->;
-
 export const listProductsSortSchema = z.object({
   sortBy: z
     .enum(["name", "price", "category", "quantity", "createdAt", "updatedAt"])

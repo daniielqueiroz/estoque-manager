@@ -1,8 +1,5 @@
-import {
-  CreateSaleInput,
-  FindSaleIdInput,
-  GenerateSaleReportInput,
-} from "./sale-schema";
+import { CreateSaleInput, FindSaleIdInput } from "./sale-schema";
+import { DateRangeInput } from "../../shared/schemas/dateRange";
 import * as ProductRepository from "../products/product-repository";
 import * as SaleRepository from "./sale-repository";
 import { AppError } from "../../shared/errors/AppError";
@@ -67,7 +64,7 @@ export const searchSaleById = async (id: FindSaleIdInput) => {
 };
 
 export const generateSaleReport = async (
-  range: GenerateSaleReportInput,
+  range: DateRangeInput,
   userTimezone: string,
 ) => {
   const { totalSales, totalProductsSold, totalRevenue, dailyData } =

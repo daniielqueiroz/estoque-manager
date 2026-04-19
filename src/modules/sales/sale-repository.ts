@@ -1,6 +1,7 @@
 import { Prisma, SaleStatus } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
-import { FindSaleIdInput, GenerateSaleReportInput } from "./sale-schema";
+import { FindSaleIdInput } from "./sale-schema";
+import { DateRangeInput } from "../../shared/schemas/dateRange";
 import { DailySaleRow } from "../products/product-schema";
 
 /**
@@ -83,7 +84,7 @@ export const findById = async ({ id }: FindSaleIdInput) => {
 };
 
 export const reportData = async (
-  range: GenerateSaleReportInput,
+  range: DateRangeInput,
   userTimezone: string,
 ) => {
   const condition = {

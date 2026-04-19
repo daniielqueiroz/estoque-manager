@@ -4,10 +4,10 @@ import * as ProductRepository from "./product-repository";
 import {
   CreateProductInput,
   FindProductIdInput,
-  GenerateProductReportInput,
   ListProductsSort,
   UpdateProductInput,
 } from "./product-schema";
+import { DateRangeInput } from "../../shared/schemas/dateRange";
 
 export const createProduct = async (data: CreateProductInput) => {
   const product = await ProductRepository.create(data);
@@ -20,7 +20,12 @@ export const listProducts = async (
   sort: ListProductsSort,
   search?: string,
 ) => {
-  const { data, total } = await ProductRepository.findAll(page, pageSize, sort, search);
+  const { data, total } = await ProductRepository.findAll(
+    page,
+    pageSize,
+    sort,
+    search,
+  );
 
   return paginate({ data, total, page, pageSize });
 };
@@ -37,7 +42,7 @@ export const getProductById = async (productId: FindProductIdInput) => {
 
 export const generateProductSaleReport = async (
   id: FindProductIdInput,
-  range: GenerateProductReportInput,
+  range: DateRangeInput,
   userTimezone: string,
 ) => {
   const product = await ProductRepository.findById(id);

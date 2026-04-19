@@ -21,13 +21,3 @@ export const findSaleIdSchema = z.object({
 });
 export type FindSaleIdInput = z.infer<typeof findSaleIdSchema>;
 
-export const generateSaleReportSchema = z
-  .object({
-    startDate: z.iso.datetime().transform((val) => new Date(val)),
-    endDate: z.iso.datetime().transform((val) => new Date(val)),
-  })
-  .refine((data) => data.endDate >= data.startDate, {
-    message: "endDate deve ser maior ou igual a startDate",
-    path: ["endDate"],
-  });
-export type GenerateSaleReportInput = z.infer<typeof generateSaleReportSchema>;

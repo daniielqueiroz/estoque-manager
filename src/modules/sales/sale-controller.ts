@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
-import {
-  CreateSaleInput,
-  findSaleIdSchema,
-  generateSaleReportSchema,
-} from "./sale-schema";
+import { CreateSaleInput, findSaleIdSchema } from "./sale-schema";
+import { dateRangeSchema } from "../../shared/schemas/dateRange";
 import * as SaleService from "./sale-service";
 import { paginationSchema } from "../../shared/schemas/pagination";
 
@@ -33,10 +30,10 @@ export const getSale = async (req: Request, res: Response) => {
 
 export const getSaleReport = async (req: Request, res: Response) => {
   const range = req.query;
-  const validRange = generateSaleReportSchema.parse(range);
+  const validRange = dateRangeSchema.parse(range);
 
   const saleReport = await SaleService.generateSaleReport(
-    { startDate: validRange.startDate, endDate: validRange.endDate },
+    validRange,
     req.userTimezone,
   );
 

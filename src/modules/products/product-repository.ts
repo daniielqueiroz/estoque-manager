@@ -42,6 +42,13 @@ export const findAll = async (
   return { data, total };
 };
 
+export const exportAll = async () => {
+  const products = await prisma.product.findMany({
+    where: { deletedAt: null },
+  });
+  return products;
+};
+
 export const findManyByIds = async (ids: string[]) => {
   const products = await prisma.product.findMany({
     where: { id: { in: ids }, deletedAt: null },

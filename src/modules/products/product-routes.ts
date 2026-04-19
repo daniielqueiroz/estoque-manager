@@ -11,6 +11,7 @@ productRouter.post(
   ProductController.postProduct,
 );
 productRouter.get("/", ProductController.getProducts);
+productRouter.get("/export", ProductController.exportProducts);
 productRouter.get("/:id", ProductController.getProduct);
 productRouter.get("/:id/report", ProductController.getProductSaleReport);
 productRouter.put(

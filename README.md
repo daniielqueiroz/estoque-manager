@@ -357,8 +357,8 @@ SaleItem
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/daniielqueiroz/estoque-manager.git
-cd estoque-manager
+git clone https://github.com/daniielqueiroz/estoque-manager-api.git
+cd estoque-manager-api
 ```
 
 ### 2. Instalar as dependências

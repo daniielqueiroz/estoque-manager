@@ -265,9 +265,9 @@ async function main() {
   ];
 
   // 210 vendas distribuídas de 02/01/2026 a 08/03/2026 (~65 dias)
-  const startDate = new Date("2026-01-02T08:00:00.000Z");
-  const totalDays = 65;
-  const totalSales = 210;
+  const startDate = new Date("2025-11-01T08:00:00.000Z");
+  const totalDays = 120;
+  const totalSales = 3423;
 
   let salesCreated = 0;
 
@@ -285,8 +285,12 @@ async function main() {
 
     // 1 a 4 itens por venda de forma determinística
     const itemCount = (i % 4) + 1;
-    const items: { productId: string; quantity: number; unitPrice: number; createdAt: Date }[] =
-      [];
+    const items: {
+      productId: string;
+      quantity: number;
+      unitPrice: number;
+      createdAt: Date;
+    }[] = [];
 
     for (let j = 0; j < itemCount; j++) {
       const product = pickCyclic(allProducts, i * 5 + j * 11);
